@@ -1,11 +1,10 @@
-// Setting up 2d array with numbers in it. The last cell is 0 ( empty cell )
+/* Setting up 2d array with numbers in it. The last cell is 0 ( empty cell ) */
 function Puzzle(n) {
     this.n = n;
     this.board = [];
     this.path = [];
     this.lastMove = null;
     this.numberIn = 1;
-    this.winner;
     // Setting up the board
     for (let i = 0; i < n; i++) {
         // making board 2D
@@ -16,19 +15,17 @@ function Puzzle(n) {
         }
     }
     this.board[n - 1][n - 1] = 0;
-
-    this.winner = this.board;
 }
 
 
 // shuffle the board
 Puzzle.prototype.mixBoard = function() {
-    this.move(8);
-    this.move(5);
-    this.move(4);
-    this.move(1);
-    this.move(2);
-    this.move(4);
+    this.move(15);
+    this.move(14);
+    this.move(10);
+    this.move(11);    
+    this.move(7);   
+    
 }
 
 // Get position of the empty cell
@@ -103,7 +100,9 @@ Puzzle.prototype.move = function(cell) {
             if (cell != 0) {
                 let x = Math.floor((cell - 1) / this.n);
                 let y = (cell - 1) % this.n;
-                if (i != x || j != y) return false;
+                if (i != x || j != y){ 
+                    return false;
+                }
             }
         }
     }
@@ -112,7 +111,7 @@ Puzzle.prototype.move = function(cell) {
 
 // return allowed moves
 Puzzle.prototype.getAllowedMoves = function() {
-    var allowedMoves = [];
+    let allowedMoves = [];
     for (let i = 0; i < this.n; i++) {
         for (let j = 0; j < this.n; j++) {
             let cell = this.board[i][j];
@@ -124,24 +123,25 @@ Puzzle.prototype.getAllowedMoves = function() {
     return allowedMoves;
   };
 
-  // return copy of puzzle
+  // return copy of a puzzle
 Puzzle.prototype.getCopy = function() {
-    var newPuzzle = new Puzzle(this.n);
+    let newPuzzle = new Puzzle(this.n);
     for (let i = 0; i < this.n; i++) {
         for (let j = 0; j < this.n; j++) {
             newPuzzle.board[i][j] = this.board[i][j];
         }
     }
-    for (var i = 0; i < this.path.length; i++) {
+    for (let i = 0; i < this.path.length; i++) {
         newPuzzle.path.push(this.path[i]);
     }
     return newPuzzle;
   };
 
+  /* get children of a puzzle ( all possible next puzzles ) */
   Puzzle.prototype.getChildren = function() {
     let children = [];
     let allowedMoves = this.getAllowedMoves();
-    for (var i = 0; i < allowedMoves.length; i++)  {
+    for (let i = 0; i < allowedMoves.length; i++)  {
         let move = allowedMoves[i];
         if (move != this.lastMove) {
             let newInstance = this.getCopy();
@@ -177,9 +177,8 @@ Puzzle.prototype.getCopy = function() {
   Puzzle.prototype.g = function() {
     return this.path.length;
   };
-
   
-  // Misplaced tiles
+  // Misplaced cells
   Puzzle.prototype.h = function() {
     let count = 0;
     for (let i = 0; i < this.n; i++) {
@@ -188,17 +187,18 @@ Puzzle.prototype.getCopy = function() {
             if (cell != 0) {
                 let x = Math.floor((cell - 1) / this.n);
                 let y = (cell - 1) % this.n;
-                if (i != x || j != y) count++;
+                if (i != x || j != y){
+                    count++;
+                }
             }
         }
   }    
   return count;
 }
-
 /*
 // Manhattan distance
 Puzzle.prototype.h = function() {
-    var distance = 0;
+     distance = 0;
     for (let i = 0; i < this.n; i++) {
         for (let j = 0; j < this.n; j++) {
             let cell = this.board[i][j];
@@ -213,12 +213,10 @@ Puzzle.prototype.h = function() {
   }
 */
 
-let p = new Puzzle(3);
-p.mixBoard();
+let p = new Puzzle(4);
 console.log(p.board);
+p.mixBoard();
 let path = p.solveA();
-console.log(path);
-
 let steps = 0;
 
 path.map(cell => {

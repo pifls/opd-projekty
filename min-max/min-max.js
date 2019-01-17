@@ -82,9 +82,9 @@ function minimax(board, opponent) {
 	let emptyCells = emptycells();
 
 	if (checkWin(board, player)) {
-		return {score: -10};
+		return {score: -1};
 	} else if (checkWin(board, computer)) {
-		return {score: 10};
+		return {score: 1};
 	} else if (emptyCells.length == 0) {
 		return {score: 0};
 	}

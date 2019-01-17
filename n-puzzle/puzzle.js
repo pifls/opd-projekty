@@ -155,13 +155,12 @@ Puzzle.prototype.getCopy = function() {
 
 
   Puzzle.prototype.solveA = function() {
-    let states = new MinHeap(null, function(a, b) {
+    let openList = new MinHeap(null, function(a, b) {
         return a.distance - b.distance;
     });
-    this.path = [];
-    states.push({puzzle: this, distance: 0});
-    while (states.size() > 0) {
-        let state = states.pop().puzzle;
+    openList.push({puzzle: this, distance: 0});
+    while (openList.size() > 0) {
+        let state = openList.pop().puzzle;
         if (state.winningBoard()) {
             return state.path;
         }
@@ -169,7 +168,7 @@ Puzzle.prototype.getCopy = function() {
         for (let i = 0; i < children.length; i++) {
             let child = children[i];
             let f = child.g() + child.h();
-            states.push({puzzle : child, distance: f});
+            openList.push({puzzle : child, distance: f});
         }
     }
   };
